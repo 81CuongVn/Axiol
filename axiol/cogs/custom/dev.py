@@ -1,11 +1,12 @@
-import contextlib
-import io
 import textwrap
 
 import discord
 from discord.ext import commands
 
 from axiol import DEVS_ID
+
+import io
+import contextlib
 
 
 class Owner(commands.Cog):
@@ -15,12 +16,12 @@ class Owner(commands.Cog):
         self.client = client
 
     def cog_check(self, ctx):
-        if ctx.author.id in DEVS_ID:
+        if ctx.author.id not in DEVS_ID:
             raise commands.NotOwner
         return True
 
     @commands.command(aliases=["eval"])
-    @commands.is_owner
+    @commands.is_owner()
     async def e(self, ctx, *, code: str = None):
         if code is None:
             return await ctx.send(
@@ -44,7 +45,7 @@ class Owner(commands.Cog):
                     local_vars
                 )
 
-                obj = await local_vars["func"]()
+                await local_vars["func"]()
                 result = f"{stdout.getvalue()}"
 
         except Exception as e:
