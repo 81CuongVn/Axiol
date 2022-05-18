@@ -85,38 +85,25 @@ class Extras(commands.Cog):
             guild_count += 1
             member_count += guild.member_count
 
-        embed = discord.Embed(
-            title="Some information about me :flushed:",
-            description=(
-                f"[Donation](https://paypal.me/palbolt) "
-                f"[Vote](https://top.gg/bot/843484459113775114/vote) "
-                f"[Support](https://discord.gg/Rzz5WS9jXW)"
-            ),
-            color=var.C_MAIN
-        ).add_field(
-            name="Server Count",
-            value=str(guild_count),
-            inline=False
-        ).add_field(
-            name="Members",
-            value=member_count,
-            inline=False
-        ).add_field(
-            name="Made by",
-            value="Bolt#8905",
-            inline=False
-        ).add_field(
-            name="Creation date",
-            value="16 May, 2021",
-            inline=False
-        ).set_footer(
-            text=f"Ping: {ping}"
-        ).set_thumbnail(
-            url=(
-                "https://cdn.discordapp.com/attachments/843519647055609856/"
-                "845662999686414336/Logo1.png"
+        embed = (
+            discord.Embed(
+                title="Some information about me :flushed:",
+                description="[Donation](https://paypal.me/palbolt) ",
+                color=var.C_MAIN,
+            )
+            .add_field(name="Server Count", value=str(guild_count), inline=False)
+            .add_field(name="Members", value=member_count, inline=False)
+            .add_field(name="Made by", value="Bolt#8905", inline=False)
+            .add_field(name="Creation date", value="16 May, 2021", inline=False)
+            .set_footer(text=f"Ping: {ping}")
+            .set_thumbnail(
+                url=(
+                    "https://cdn.discordapp.com/attachments/843519647055609856/"
+                    "845662999686414336/Logo1.png"
+                )
             )
         )
+
 
         await ctx.send(embed=embed)
 

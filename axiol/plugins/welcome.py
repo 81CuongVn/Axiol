@@ -106,11 +106,11 @@ class Welcome(commands.Cog):
         guild_doc = await db.WELCOME.find_one({"_id": ctx.guild.id})
 
         def get_content():
-            if guild_doc.get("message") is None:
-                content = greeting(ctx.author.mention)
-            else:
-                content = guild_doc.get("message")
-            return content
+            return (
+                greeting(ctx.author.mention)
+                if guild_doc.get("message") is None
+                else guild_doc.get("message")
+            )
 
         embed = discord.Embed(
             title="Welcome to the server!",
@@ -505,12 +505,11 @@ class Welcome(commands.Cog):
         channel = self.bot.get_channel(welcome_doc.get("channelid"))
 
         def get_content():
-            if welcome_doc.get("message") is None:
-                content = greeting(member.mention)
-            else:
-                content = f"{member.mention} {welcome_doc.get('message')}"
-
-            return content
+            return (
+                greeting(member.mention)
+                if welcome_doc.get("message") is None
+                else f"{member.mention} {welcome_doc.get('message')}"
+            )
 
         embed = discord.Embed(
             title="Welcome to the server!",

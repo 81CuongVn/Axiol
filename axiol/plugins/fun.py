@@ -93,7 +93,7 @@ class TypeRacer:
         raw_wpm = round((len(user_content) / 5 / time_taken) * 60, 2)
         error_rate = round(len(mistakes) / time_taken, 2)
         wpm = round(raw_wpm - error_rate, 2)
-        wpm = wpm if wpm >= 0 else 0
+        wpm = max(wpm, 0)
 
         return wpm, accuracy
 
@@ -111,10 +111,7 @@ class TypeRacer:
             )
 
             if m:
-                await player.send(
-                    f"You test has been completed! "
-                    f"Waiting for other players to complete to send results."
-                )
+                await player.send("You test has been completed! ")
 
                 return time.time(), m.content
 
@@ -141,7 +138,7 @@ class TypeRacer:
         msgs = {}
         for player in self.players:
             msg = await player.send(embed=embed)
-            msgs.update({player: msg})
+            msgs[player] = msg
 
         for _ in range(4):
             count -= 1
@@ -155,7 +152,7 @@ class TypeRacer:
             image.save(image_binary, 'PNG')
             for player in self.players:
                 image_binary.seek(0)
-                embed.description = f"Match starting now!"
+                embed.description = "Match starting now!"
                 await msgs[player].edit(embed=embed)
 
                 await player.send(
@@ -171,19 +168,14 @@ class TypeRacer:
             title="Typing race results", color=var.C_GREEN
         )
 
-        results = {}
         datas = await asyncio.gather(
             *[self.coro(player) for player in self.players]
         )
 
-        for player, data in zip(self.players, datas):
-            results.update(
-                {
-                    self.calculate_result(
-                        start_time, data[0], data[1], text
-                    ): player
-                }
-            )
+        results = {
+            self.calculate_result(start_time, data[0], data[1], text): player
+            for player, data in zip(self.players, datas)
+        }
 
         ordered = sorted(results.items(), reverse=True)
         for r in ordered:
@@ -239,24 +231,26 @@ class Fun(commands.Cog):
             return await ctx.send(
                 content=f"You are already in a queue {ctx.author.mention}",
                 embed=discord.Embed(
-                    title=f"Queue info",
+                    title="Queue info",
                     description=(
                         f"The match currently has `{len(match.players)}` "
                         "players in the queue"
                     ),
-                    color=var.C_ORANGE
-                ).add_field(
-                    name="Code", value=match.code, inline=False
-                ).add_field(
+                    color=var.C_ORANGE,
+                )
+                .add_field(name="Code", value=match.code, inline=False)
+                .add_field(
                     name="Started",
-                    value=match.time_elapsed() + " ago",
-                    inline=False
-                ).add_field(
+                    value=f"{match.time_elapsed()} ago",
+                    inline=False,
+                )
+                .add_field(
                     name="Players required",
                     value=match.required_amount,
-                    inline=False
-                )
+                    inline=False,
+                ),
             )
+
 
         if not self.matches:
             await ctx.send(
@@ -290,21 +284,21 @@ class Fun(commands.Cog):
                 embed=discord.Embed(
                     title="You have been added to the queue!",
                     description=f"The queue currently has **{len(match.players)}** players.",
-                    color=var.C_BLUE
-                ).add_field(
-                    name="Code",
-                    value=match.code,
-                    inline=False
-                ).add_field(
+                    color=var.C_BLUE,
+                )
+                .add_field(name="Code", value=match.code, inline=False)
+                .add_field(
                     name="Started",
-                    value=match.time_elapsed() + " ago",
-                    inline=False
-                ).add_field(
+                    value=f"{match.time_elapsed()} ago",
+                    inline=False,
+                )
+                .add_field(
                     name="Players required",
                     value=match.required_amount,
-                    inline=False
+                    inline=False,
                 )
             )
+
 
             await match.join_alert(ctx.author)
             if len(match.players) >= match.required_amount:
@@ -314,8 +308,7 @@ class Fun(commands.Cog):
     @type_racer.command(aliases=["quit", "leave"])
     @has_command_permission()
     async def exit(self, ctx):
-        match = self.get_match(ctx.author)
-        if match:
+        if match := self.get_match(ctx.author):
             match.remove_player(ctx.author)
             await ctx.send(
                 "You removed yourself from the queue of "
@@ -410,18 +403,20 @@ class Fun(commands.Cog):
                         "The queue currently has "
                         f"**{len(match.players)}** players."
                     ),
-                    color=var.C_BLUE
-                ).add_field(
-                    name="Code", value=match.code,
-                ).add_field(
-                    name="Started",
-                    value=match.time_elapsed() + " ago",
-                    inline=False
-                ).add_field(
-                    name="Players required",
-                    value=match.required_amount
+                    color=var.C_BLUE,
                 )
+                .add_field(
+                    name="Code",
+                    value=match.code,
+                )
+                .add_field(
+                    name="Started",
+                    value=f"{match.time_elapsed()} ago",
+                    inline=False,
+                )
+                .add_field(name="Players required", value=match.required_amount)
             )
+
 
             await match.join_alert(ctx.author)
 

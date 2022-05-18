@@ -153,12 +153,7 @@ class ChemistryHelp(commands.Cog):
             await bot_msg.add_reaction("▶️")
 
             def reaction_check(r, u):
-                if (
-                    str(r.emoji) == "◀️"
-                    or str(r.emoji) == "⬅️"
-                    or str(r.emoji) == "➡️"
-                        or str(r.emoji) == "▶️"
-                ):
+                if str(r.emoji) in {"◀️", "⬅️", "➡️", "▶️"}:
                     return u == ctx.author and reaction.message == bot_msg
 
             current_page = 0
@@ -372,12 +367,7 @@ class ChemistryHelp(commands.Cog):
             await bot_msg.add_reaction("▶️")
 
             def reaction_check(r, u):
-                if (
-                    str(r.emoji) == "◀️"
-                    or str(r.emoji) == "⬅️"
-                    or str(r.emoji) == "➡️"
-                    or str(r.emoji) == "▶️"
-                ):
+                if str(r.emoji) in {"◀️", "⬅️", "➡️", "▶️"}:
                     return u == ctx.author and reaction.message == bot_msg
 
             current_page = 0

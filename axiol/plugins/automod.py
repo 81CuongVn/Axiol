@@ -60,10 +60,11 @@ class AutoMod(commands.Cog):
             )
 
             embed.add_field(
-                name=status + " " + i,
+                name=f"{status} {i}",
                 value=f"{await get_prefix(ctx)}filters {i.lower()}",
-                inline=False
+                inline=False,
             )
+
 
         await ctx.send(embed=embed)
 
@@ -717,17 +718,15 @@ class AutoMod(commands.Cog):
                 color=var.C_TEAL
             )
 
-            all_banned_words = "".join(
+            if all_banned_words := "".join(
                 f"`{i}` " for i in guild_doc["BadWords"]["words"]
-            )
-
-            if all_banned_words == "":
-                await ctx.send(
-                    "This server does not have any bad word right now.")
-
-            else:
+            ):
                 embed.add_field(name="All bad words", value=all_banned_words)
                 await ctx.send(embed=embed)
+
+            else:
+                await ctx.send(
+                    "This server does not have any bad word right now.")
 
         else:
             await ctx.send("This server does not have automod setted up")
@@ -802,8 +801,7 @@ class AutoMod(commands.Cog):
 
                 if guild_doc["BadWords"]["status"]:
                     bad_words = guild_doc["BadWords"]["words"]
-                    if len([i for i in bad_words if
-                            i in message.content]) > 0:
+                    if [i for i in bad_words if i in message.content]:
                         await message.delete()
                         res = guild_doc["BadWords"]["response"]
                         await message.channel.send(

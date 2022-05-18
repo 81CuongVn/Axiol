@@ -25,9 +25,10 @@ bot = commands.Bot(command_prefix=guild_prefix, help_command=None,
 async def on_ready():
     await bot.change_presence(
         activity=discord.Activity(
-            type=discord.ActivityType.streaming,
-            name=f"Ping and ask for help 👀"
-        ))
+            type=discord.ActivityType.streaming, name="Ping and ask for help 👀"
+        )
+    )
+
     print("I woke up 🌥️")
 
 

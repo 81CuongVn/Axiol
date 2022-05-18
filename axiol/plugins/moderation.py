@@ -529,13 +529,15 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                    title=f"🚫 Missing arguments",
+                    title="🚫 Missing arguments",
                     description="You need to define both member and role",
-                    color=var.C_RED
-                ).add_field(
+                    color=var.C_RED,
+                )
+                .add_field(
                     name="Format",
-                    value=f"```{await get_prefix(ctx)}addrole <member> <role>```"
-                ).set_footer(
+                    value=f"```{await get_prefix(ctx)}addrole <member> <role>```",
+                )
+                .set_footer(
                     text=(
                         "For both member and role, "
                         "either ping or ID can be used"
@@ -576,16 +578,18 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                    title=f"🚫 Missing arguments",
+                    title="🚫 Missing arguments",
                     description="You need to define both member and role",
-                    color=var.C_RED
-                ).add_field(
+                    color=var.C_RED,
+                )
+                .add_field(
                     name="Format",
                     value=(
                         f"```{await get_prefix(ctx)}removerole"
                         f" <member> <role>```"
-                    )
-                ).set_footer(
+                    ),
+                )
+                .set_footer(
                     text=(
                         "For both member and role,"
                         " either ping or ID can be used"
@@ -843,7 +847,7 @@ class Moderation(commands.Cog):
             )
             if guild_log_doc["modlog"]:
                 channel = self.bot.get_channel(guild_log_doc["channel_id"])
-                
+
                 await channel.send(embed=discord.Embed(
                     title="⚠️ Warn",
                     description=f"{member.mention} has been warned by {ctx.author.mention}",
@@ -860,15 +864,15 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                    title=f"🚫 Missing arguments",
+                    title="🚫 Missing arguments",
                     description=(
                         "You need to define both the member"
                         " and reason to warn them!"
                     ),
-                    color=var.C_RED
+                    color=var.C_RED,
                 ).add_field(
                     name="Format",
-                    value=f"```{await get_prefix(ctx)}warn <member> <reason>```"
+                    value=f"```{await get_prefix(ctx)}warn <member> <reason>```",
                 )
             )
 
@@ -884,9 +888,11 @@ class Moderation(commands.Cog):
             except ValueError:
                 await ctx.send(
                     embed=discord.Embed(
-                        description=f"The position should be a number!",
-                        color=var.C_RED)
+                        description="The position should be a number!",
+                        color=var.C_RED,
                     )
+                )
+
                 return
 
             guild_col = db.WARNINGS_DATABASE[str(ctx.guild.id)]
@@ -939,7 +945,7 @@ class Moderation(commands.Cog):
                     )
                     if guild_log_doc["modlog"]:
                         channel = self.bot.get_channel(guild_log_doc["channel_id"])
-                        
+
                         await channel.send(embed=discord.Embed(
                             title="⚠️ Remove warn",
                             description=f"{member.mention} has been unwarned by {ctx.author.mention}",
@@ -963,21 +969,21 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                    title=f"🚫 Missing arguments",
+                    title="🚫 Missing arguments",
                     description=(
                         "You need to define both the member "
                         "and the warn position to remove the warn"
                     ),
-                    color=var.C_RED
-                ).add_field(
+                    color=var.C_RED,
+                )
+                .add_field(
                     name="Format",
                     value=(
                         f"```{await get_prefix(ctx)}removewarn "
                         "<member> <position>```"
-                    )
-                ).set_footer(
-                    text="Note that position here is just a number"
+                    ),
                 )
+                .set_footer(text="Note that position here is just a number")
             )
 
     @commands.command()
@@ -1016,14 +1022,14 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                    title=f"🚫 Missing arguments",
+                    title="🚫 Missing arguments",
                     description=(
                         "You need to define the member to view their warns"
                     ),
-                    color=var.C_RED
+                    color=var.C_RED,
                 ).add_field(
                     name="Format",
-                    value=f"```{await get_prefix(ctx)}warns <member>```"
+                    value=f"```{await get_prefix(ctx)}warns <member>```",
                 )
             )
 

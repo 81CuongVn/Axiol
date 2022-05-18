@@ -126,16 +126,12 @@ class Giveaway(commands.Cog):
         def time_converter(string, type_):
             if type_ == "Duration":
                 formats = ("s", "m", "h", "d")
+                if string[-1] not in formats or not [l for l in string if l.isdigit()]:
+                    return False, None
+
                 conversions = {"s": 1, "m": 60, "h": 3600, "d": 86400}
 
-                if (
-                    string[-1] in formats
-                    and len([l for l in string if l.isdigit()]) != 0
-                ):
-                    return True, int(string[:-1]) * conversions[string[-1]]
-
-                else:
-                    return False, None
+                return True, int(string[:-1]) * conversions[string[-1]]
 
             elif type_ == "Winners":
                 return string.isdigit(), None
@@ -331,9 +327,7 @@ class Giveaway(commands.Cog):
     async def g_show(self, ctx):
         embed = discord.Embed(title="All active giveaways", color=var.C_MAIN)
 
-        async for i in db.GIVEAWAY.find(
-            {"_id": {"$regex": "^" + str(ctx.guild.id)}}
-        ):
+        async for i in db.GIVEAWAY.find({"_id": {"$regex": f"^{str(ctx.guild.id)}"}}):
             readable = str(
                 datetime.datetime.fromtimestamp(i["end_time"])
                 - datetime.datetime.fromtimestamp(time.time())
@@ -376,10 +370,12 @@ class Giveaway(commands.Cog):
             )
 
         all_msg_ids = [
-            x["message_id"] async for x in db.GIVEAWAY.find(
-                {"_id": {"$regex": "^" + str(ctx.guild.id)}}
+            x["message_id"]
+            async for x in db.GIVEAWAY.find(
+                {"_id": {"$regex": f"^{str(ctx.guild.id)}"}}
             )
         ]
+
 
         if msg_id not in all_msg_ids:
             return await ctx.send(
@@ -423,17 +419,20 @@ class Giveaway(commands.Cog):
                     main_time = readable.split(":")[0] + " Hours"
                     secondary_time = readable.split(":")[1] + " Minutes"
 
-                    embed = discord.Embed(
-                        title=embed_data["title"],
-                        description=embed_data["description"],
-                        color=var.C_MAIN,
-                        timestamp=datetime.datetime.now()
-                    ).add_field(
-                        name=embed_data["fields"][0]["name"],
-                        value=main_time + " " + secondary_time
-                    ).set_thumbnail(
-                        url=embed_data["thumbnail"]["url"]
+                    embed = (
+                        discord.Embed(
+                            title=embed_data["title"],
+                            description=embed_data["description"],
+                            color=var.C_MAIN,
+                            timestamp=datetime.datetime.now(),
+                        )
+                        .add_field(
+                            name=embed_data["fields"][0]["name"],
+                            value=f"{main_time} {secondary_time}",
+                        )
+                        .set_thumbnail(url=embed_data["thumbnail"]["url"])
                     )
+
 
                     await message.edit(embed=embed)
 

@@ -183,10 +183,11 @@ async def one_word_story(self):
     new_word = await get_random_text(0)
 
     embed = discord.Embed(
-        title=f"Create a new story!",
+        title="Create a new story!",
         description=f">>> **Previous story**\n{first_word} {previous_story}",
-        color=var.C_MAIN
+        color=var.C_MAIN,
     ).add_field(name="New word", value=new_word.strip("."))
+
 
     await channel.send(embed=embed)
 

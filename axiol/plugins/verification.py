@@ -653,10 +653,7 @@ class Verification(commands.Cog):
             )
 
             if guild_verify_doc is None:
-                print(
-                    f"First time verification being enabled",
-                    message.guild.name
-                )
+                print("First time verification being enabled", message.guild.name)
 
             elif (
                 message.channel.id == guild_verify_doc["channel"]

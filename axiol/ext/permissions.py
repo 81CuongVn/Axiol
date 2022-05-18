@@ -12,19 +12,18 @@ def has_command_permission():
         guild_doc = await db.PERMISSIONS.find_one({"_id": ctx.guild.id})
 
         try:
-            permitted_roles = [i for i in guild_doc[plugin_name][cmd_name]]
+            permitted_roles = list(guild_doc[plugin_name][cmd_name])
             author_roles = [i.id for i in ctx.author.roles]
 
             if not permitted_roles:
                 return True
 
-            else:
-                permission = any(
-                    item in permitted_roles for item in author_roles
-                )
+            permission = any(
+                item in permitted_roles for item in author_roles
+            )
 
-                if permission:
-                    return True
+            if permission:
+                return True
 
         except KeyError:
             return True
@@ -38,9 +37,7 @@ class Permissions(commands.Cog):
 
     @commands.command(name="allperms")
     async def all_perms(self, ctx):
-        embed = discord.Embed(
-            title=f"Command role permissions", color=var.C_MAIN
-        )
+        embed = discord.Embed(title="Command role permissions", color=var.C_MAIN)
 
         guild_doc = await db.PERMISSIONS.find_one(
             {"_id": ctx.guild.id},  {"_id": 0}
@@ -48,8 +45,8 @@ class Permissions(commands.Cog):
 
         for i in guild_doc:
             perms = guild_doc[i]
-            cmds = [x for x in perms]
-            roles = [x for x in perms.values()]
+            cmds = list(perms)
+            roles = list(perms.values())
             value = ""
 
             for c in cmds:

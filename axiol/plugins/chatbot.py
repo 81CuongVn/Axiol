@@ -142,16 +142,14 @@ class Chatbot(commands.Cog):
             )
 
             def channels():
-                if (
-                    guild_chatbot_doc is not None
-                    and guild_chatbot_doc.get("channels") != []
-                ):
-                    channels = guild_chatbot_doc.get("channels")
-
-                else:
-                    channels = []
-
-                return channels
+                return (
+                    guild_chatbot_doc.get("channels")
+                    if (
+                        guild_chatbot_doc is not None
+                        and guild_chatbot_doc.get("channels") != []
+                    )
+                    else []
+                )
 
             if (
                 self.bot.user in message.mentions

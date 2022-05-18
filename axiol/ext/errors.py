@@ -47,15 +47,11 @@ class Errors(commands.Cog):
             await ctx.send(
                 embed=discord.Embed(
                     title="Member not found",
-                    description=(
-                        f"🚫 You sure the mention/ID is correct? "
-                        f"Or maybe they left? "
-                        f"Maybe they don't even exist? "
-                        f"[SpongoBob?](https://youtu.be/wjXBqelv4GM)"
-                    ),
-                    color=C_RED
+                    description="🚫 You sure the mention/ID is correct? ",
+                    color=C_RED,
                 )
             )
+
 
         elif isinstance(error, commands.UserNotFound):
             await ctx.send(

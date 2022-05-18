@@ -309,24 +309,19 @@ class ReactionRoles(commands.Cog):
                     emoji = i.get("emoji")
 
                     embed.add_field(
-                        name=f"** **",
+                        name="** **",
                         value=(
-                            f"{emoji} for {role.mention}\n"
-                            f"MessageID: `{message_id}`"
+                            f"{emoji} for {role.mention}\n" f"MessageID: `{message_id}`"
                         ),
-                         inline=False
+                        inline=False,
                     )
+
 
                     if rr_count == (current_page) * 10 + 10:
                         break
 
             def reaction_check(r, u):
-                if (
-                    str(r.emoji) == "◀️"
-                    or str(r.emoji) == "⬅️"
-                    or str(r.emoji) == "➡️"
-                    or str(r.emoji) == "▶️"
-                ):
+                if str(r.emoji) in {"◀️", "⬅️", "➡️", "▶️"}:
                     return u == ctx.author and r.message == bot_msg
 
             current_page = 0

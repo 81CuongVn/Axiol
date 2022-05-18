@@ -43,9 +43,7 @@ class Leveling(commands.Cog):
             xp = userdata["xp"]
             lvl = 0
             rank = 0
-            while True:
-                if xp < ((50 * (lvl ** 2)) + (50 * lvl)):
-                    break
+            while not xp < ((50 * (lvl**2)) + (50 * lvl)):
                 lvl += 1
             xp -= ((50 * ((lvl - 1) ** 2)) + (50 * (lvl - 1)))
 
@@ -266,19 +264,17 @@ class Leveling(commands.Cog):
         max_rank_user = await self.bot.fetch_user(max_rank[0]["_id"])
 
         def get_alert_channel():
-            if settings_doc.get("alertchannel") is not None:
-                alert_channel = self.bot.get_channel(
-                    settings_doc.get("alertchannel")
-                )
-
-                if alert_channel is not None:
-                    return alert_channel.mention
-
-                else:
-                    return "deleted channel"
-
-            else:
+            if settings_doc.get("alertchannel") is None:
                 return None
+            alert_channel = self.bot.get_channel(
+                settings_doc.get("alertchannel")
+            )
+
+            return (
+                alert_channel.mention
+                if alert_channel is not None
+                else "deleted channel"
+            )
 
         status = "Enabled" if settings_doc["alerts"] else "Disabled"
         rewards = settings_doc["rewards"]
@@ -778,9 +774,7 @@ class Leveling(commands.Cog):
             xp = userdata["xp"]
 
             init_lvl = 0
-            while True:
-                if xp < ((50 * (init_lvl ** 2)) + (50 * init_lvl)):
-                    break
+            while not xp < ((50 * (init_lvl**2)) + (50 * init_lvl)):
                 init_lvl += 1
 
             xp_range = await get_xp_range(message.guild.id)
@@ -788,10 +782,7 @@ class Leveling(commands.Cog):
             await guild_level_col.update_one(userdata, {"$set": {"xp": xp}})
 
             level_now = 0
-            while True:
-                if xp < ((50 * (level_now ** 2)) + (50 * level_now)):
-                    break
-
+            while not xp < ((50 * (level_now**2)) + (50 * level_now)):
                 level_now += 1
 
             if level_now > init_lvl and guild_settings_doc["alerts"]:

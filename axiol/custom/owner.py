@@ -69,7 +69,7 @@ class Owner(commands.Cog):
         for guild in self.bot.guilds:
             for member in guild.members:
                 if member == user:
-                    data.update({guild.name: guild.id})
+                    data[guild.name] = guild.id
         await ctx.send(
             f"**{user}** found in __{len(data)}__ guilds\n```json\n{data}```"
         )

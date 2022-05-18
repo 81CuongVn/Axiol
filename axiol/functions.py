@@ -7,10 +7,7 @@ from database import PREFIXES, LEVEL_DATABASE, PLUGINS, PERMISSIONS
 async def get_prefix(ctx):
     prefix = await PREFIXES.find_one({"_id": ctx.guild.id})
 
-    if prefix is not None:
-        return prefix["prefix"]
-    else:
-        return DEFAULT_PREFIX
+    return prefix["prefix"] if prefix is not None else DEFAULT_PREFIX
 
 
 async def get_xp_range(guild_id):
@@ -38,7 +35,7 @@ async def get_random_text(typing_time):
     else:
         r = range(1)
 
-    return " ".join(random.choice(words) for i in r)
+    return " ".join(random.choice(words) for _ in r)
 
 
 def get_code(amount):
